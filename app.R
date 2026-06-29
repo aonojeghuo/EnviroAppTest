@@ -46,7 +46,9 @@ ab_places <- tibble::tribble(
 
 # Establish connection to the server board
 ## board <- pins::board_connect(auth = "envvar")
- 
+board <- pins::board_url(c(
+  "hydromet_ab_data_v2" = "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud/"
+))
 
 # --------------------------- UI ----------------------------------------------
 ui <- fluidPage(
@@ -133,17 +135,14 @@ server <- function(input, output, session) {
   # bypassing the need for users to refresh the page.
 #  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
   
-  # Custom Reactive Engine
   fc_all <- reactive({
+    # 1. Start an internal Shiny timer that triggers every hour
     invalidateLater(3600000)
     
-    # 1. Use the direct API download path instead of the webpage URL
-    # Replace YOUR-COPIED-GUID-HERE with your actual GUID!
-    data_url <- "https://connect.posit.cloud/content/019f10f9-b766-791b-6c6a-a437c567c703/download_file?variant_id=0"
-    
-    # 2. Download directly into memory
-    readRDS(url(data_url))
+    # 2. Read the data from our public URL board
+    pins::pin_read(board, "hydromet_ab_data_v2")
   })
+  
   
   output$date_ui <- renderUI({
     req(fc_all())
