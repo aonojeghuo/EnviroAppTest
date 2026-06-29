@@ -13,8 +13,8 @@ library(leaflet)
 library(DT)
 library(plotly)
 library(lubridate)
-library(pins)
-library(connectapi)
+#library(pins)
+#library(connectapi)
 #library(pins)
 
 # --------------------------- Projection & CONFIG ----------------------------
@@ -48,12 +48,7 @@ ab_places <- tibble::tribble(
 ) %>% arrange(name)
 
 # Establish connection to the server board
-## board <- pins::board_connect(auth = "envvar")
-# Establish connection using the custom environment variables.
-# This forces the pins package to authenticate properly instead of relying on internal container logic.
-# Use the robust board_rsconnect instead of board_connect
-# It relies on the PUBLIC_SERVER and PUBLIC_KEY environment variables
-board <- pins::board_connect(auth = "envvar")
+
 
 # --------------------------- UI ----------------------------------------------
 ui <- fluidPage(
@@ -137,7 +132,33 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   # 2. The standard, reliable auto-updating function
-  fc_all <- pin_reactive_read(board, "jolexyenviro/hydromet_ab_data_v2", interval = 3600000)
+  # Custom Reactive Engine: Base R Native Download (No httr or pins!)
+  fc_all <- reactive({
+    invalidateLater(3600000) # Keep the hourly auto-refresh
+    
+    # 1. Provide the exact GUID from your data pin
+    guid <- "019f10f9-b766-791b-6c6a-a437c567c703"
+    
+    # 2. Define the exact file paths pins uses on the backend
+    url_name <- paste0("https://connect.posit.cloud/content/", guid, "/hydromet_ab_data_v2.rds")
+    url_data <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
+    
+    # 3. Create a secure local landing pad for the file
+    temp_file <- tempfile(fileext = ".rds")
+    
+    # 4. Grab your API key to bypass the HTML preview pages
+    api_key <- Sys.getenv("CONNECT_API_KEY")
+    auth_header <- c(Authorization = paste("Key", api_key))
+    
+    # 5. Download directly via libcurl (tries the named file first, falls back to data.rds)
+    tryCatch({
+      download.file(url_name, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
+      return(readRDS(temp_file))
+    }, error = function(e) {
+      download.file(url_data, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
+      return(readRDS(temp_file))
+    })
+  })
   
   
   # Map Render logic

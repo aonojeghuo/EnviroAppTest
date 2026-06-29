@@ -308,65 +308,6 @@
         "RemoteSha": "0.1-6"
       }
     },
-    "bit": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "bit",
-        "Title": "Classes and Methods for Fast Memory-Efficient Boolean Selections",
-        "Version": "4.6.0",
-        "Authors@R": "c(\n    person(\"Michael\", \"Chirico\", email = \"MichaelChirico4@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Jens\", \"Oehlschlägel\", role = \"aut\"),\n    person(\"Brian\", \"Ripley\", role = \"ctb\")\n  )",
-        "Depends": "R (>= 3.4.0)",
-        "Suggests": "testthat (>= 3.0.0), roxygen2, knitr, markdown, rmarkdown,\nmicrobenchmark, bit64 (>= 4.0.0), ff (>= 4.0.0)",
-        "Description": "Provided are classes for boolean and skewed boolean vectors,\n    fast boolean methods, fast unique and non-unique integer sorting,\n    fast set operations on sorted and unsorted sets of integers, and\n    foundations for ff (range index, compression, chunked processing).",
-        "License": "GPL-2 | GPL-3",
-        "LazyLoad": "yes",
-        "ByteCompile": "yes",
-        "Encoding": "UTF-8",
-        "URL": "https://github.com/r-lib/bit",
-        "VignetteBuilder": "knitr, rmarkdown",
-        "RoxygenNote": "7.3.2",
-        "Config/testthat/edition": "3",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-03-05 07:18:45 UTC; michael",
-        "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Brian Ripley [ctb]",
-        "Maintainer": "Michael Chirico <MichaelChirico4@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2025-03-06 10:50:01 UTC",
-        "Built": "R 4.5.0; x86_64-w64-mingw32; 2025-04-30 01:03:16 UTC; windows",
-        "Archs": "x64"
-      }
-    },
-    "bit64": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "bit64",
-        "Title": "A S3 Class for Vectors of 64bit Integers",
-        "Version": "4.6.0-1",
-        "Authors@R": "c(\n    person(\"Michael\", \"Chirico\", email = \"michaelchirico4@gmail.com\", role = c(\"aut\", \"cre\")),\n    person(\"Jens\", \"Oehlschlägel\", role = \"aut\"),\n    person(\"Leonardo\", \"Silvestri\", role = \"ctb\"),\n    person(\"Ofek\", \"Shilon\", role = \"ctb\")\n  )",
-        "Depends": "R (>= 3.4.0), bit (>= 4.0.0)",
-        "Description": "\n  Package 'bit64' provides serializable S3 atomic 64bit (signed) integers.\n  These are useful for handling database keys and exact counting in +-2^63.\n  WARNING: do not use them as replacement for 32bit integers, integer64 are not\n  supported for subscripting by R-core and they have different semantics when\n  combined with double, e.g. integer64 + double => integer64.\n  Class integer64 can be used in vectors, matrices, arrays and data.frames.\n  Methods are available for coercion from and to logicals, integers, doubles,\n  characters and factors as well as many elementwise and summary functions.\n  Many fast algorithmic operations such as 'match' and 'order' support inter-\n  active data exploration and manipulation and optionally leverage caching.",
-        "License": "GPL-2 | GPL-3",
-        "LazyLoad": "yes",
-        "ByteCompile": "yes",
-        "URL": "https://github.com/r-lib/bit64",
-        "Encoding": "UTF-8",
-        "Imports": "graphics, methods, stats, utils",
-        "Suggests": "testthat (>= 3.0.3), withr",
-        "Config/testthat/edition": "3",
-        "Config/needs/development": "testthat",
-        "RoxygenNote": "7.3.2",
-        "NeedsCompilation": "yes",
-        "Packaged": "2025-01-16 14:04:20 UTC; michael",
-        "Author": "Michael Chirico [aut, cre],\n  Jens Oehlschlägel [aut],\n  Leonardo Silvestri [ctb],\n  Ofek Shilon [ctb]",
-        "Maintainer": "Michael Chirico <michaelchirico4@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2025-01-16 16:00:07 UTC",
-        "Built": "R 4.5.0; x86_64-w64-mingw32; 2025-04-30 01:47:11 UTC; windows",
-        "Archs": "x64"
-      }
-    },
     "bslib": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -542,41 +483,6 @@
         "RemoteRef": "commonmark",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "2.0.0"
-      }
-    },
-    "connectapi": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Type": "Package",
-        "Package": "connectapi",
-        "Title": "Utilities for Interacting with the 'Posit Connect' Server API",
-        "Version": "0.12.1",
-        "Authors@R": "c(\n    person(given = \"Kara\",\n           family = \"Woo\",\n           role = c(\"aut\", \"cre\"),\n           email = \"kara.woo@posit.co\"),\n    person(given = \"Toph\",\n           family = \"Allen\",\n           role = c(\"aut\"),\n           email = \"toph@posit.co\"),\n    person(given = \"Neal\",\n           family = \"Richardson\",\n           role = c(\"aut\")),\n    person(given = \"Sean\",\n           family = \"Lopp\",\n           role = c(\"aut\")),\n    person(given = \"Cole\",\n           family = \"Arendt\",\n           role = c(\"aut\")),\n    person(given = \"Posit, PBC\",\n           role = c(\"cph\", \"fnd\")))",
-        "Description": "Provides a helpful 'R6' class and methods for interacting with\n    the 'Posit Connect' Server API along with some meaningful utility functions\n    for regular tasks. API documentation varies by 'Posit Connect' installation\n    and version, but the latest documentation is also hosted publicly at\n    <https://docs.posit.co/connect/api/>.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://posit-dev.github.io/connectapi/,\nhttps://github.com/posit-dev/connectapi",
-        "BugReports": "https://github.com/posit-dev/connectapi/issues",
-        "Imports": "bit64, fs, glue, httr, mime, jsonlite, lifecycle, magrittr,\npurrr, R6, rlang (>= 0.4.2), tibble, uuid, vctrs (>= 0.3.0),\nbase64enc",
-        "Suggests": "covr, dbplyr, dplyr, ggplot2, gridExtra, httptest, knitr,\nlubridate, progress, rmarkdown, rprojroot, rsconnect, spelling,\ntestthat, tidyr, webshot2, withr",
-        "VignetteBuilder": "knitr",
-        "Encoding": "UTF-8",
-        "Language": "en-US",
-        "RoxygenNote": "7.3.3",
-        "Config/testthat/edition": "3",
-        "Collate": "'audits.R' 'browse.R' 'connect.R' 'connectapi-package.R'\n'connectapi.R' 'content.R' 'deploy.R' 'get.R' 'git.R'\n'groups.R' 'integrations.R' 'lazy.R' 'page.R' 'parse.R'\n'promote.R' 'ptype.R' 'remote.R' 'runtime-caches.R'\n'schedule.R' 'tags.R' 'utils.R' 'thumbnail.R' 'user.R'\n'utils-pipe.R' 'variant.R'",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-04-29 19:15:15 UTC; kara",
-        "Author": "Kara Woo [aut, cre],\n  Toph Allen [aut],\n  Neal Richardson [aut],\n  Sean Lopp [aut],\n  Cole Arendt [aut],\n  Posit, PBC [cph, fnd]",
-        "Maintainer": "Kara Woo <kara.woo@posit.co>",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-04-29 20:00:03 UTC",
-        "Built": "R 4.5.3; ; 2026-06-27 03:44:31 UTC; windows",
-        "RemoteType": "standard",
-        "RemotePkgRef": "connectapi",
-        "RemoteRef": "connectapi",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "0.12.1"
       }
     },
     "cpp11": {
@@ -1785,41 +1691,6 @@
         "RemoteSha": "1.11.1"
       }
     },
-    "pins": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Type": "Package",
-        "Package": "pins",
-        "Title": "Pin, Discover, and Share Resources",
-        "Version": "1.4.2",
-        "Authors@R": "c(\n    person(\"Julia\", \"Silge\", , \"julia.silge@posit.co\", role = c(\"cre\", \"aut\"),\n           comment = c(ORCID = \"0000-0002-3671-836X\")),\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\",\n           comment = c(ORCID = \"0000-0003-4757-117X\")),\n    person(\"Javier\", \"Luraschi\", , \"jluraschi@gmail.com\", role = \"aut\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"))\n  )",
-        "Description": "Publish data sets, models, and other R objects, making it\n    easy to share them across projects and with your colleagues. You can\n    pin objects to a variety of \"boards\", including local folders (to\n    share on a networked drive or with 'DropBox'), 'Posit Connect',\n    'AWS S3', and more.",
-        "License": "Apache License (>= 2)",
-        "URL": "https://pins.rstudio.com/, https://github.com/rstudio/pins-r",
-        "BugReports": "https://github.com/rstudio/pins-r/issues",
-        "Depends": "R (>= 4.1.0)",
-        "Imports": "cli, digest, fs, generics, glue, httr, jsonlite, lifecycle,\npurrr (>= 1.0.0), rappdirs, rlang (>= 1.1.0), tibble, whisker,\nwithr (>= 2.4.3), yaml",
-        "Suggests": "archive, arrow, AzureStor, covr, data.table, datasets,\nfilelock, gitcreds, googleCloudStorageR, googledrive, httr2,\nids, knitr, Microsoft365R, mime, mockery, nanoparquet, openssl,\npaws.storage, qs2, R.utils, rmarkdown, rsconnect, shiny,\nsodium, testthat (>= 3.1.7), webfakes (>= 1.2.0), xml2, zip",
-        "VignetteBuilder": "knitr",
-        "Config/Needs/website": "tidyverse/tidytemplate",
-        "Config/testthat/edition": "3",
-        "Encoding": "UTF-8",
-        "RoxygenNote": "7.3.3",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-03-09 13:27:10 UTC; juliasilge",
-        "Author": "Julia Silge [cre, aut] (ORCID: <https://orcid.org/0000-0002-3671-836X>),\n  Hadley Wickham [aut] (ORCID: <https://orcid.org/0000-0003-4757-117X>),\n  Javier Luraschi [aut],\n  Posit Software, PBC [cph, fnd]",
-        "Maintainer": "Julia Silge <julia.silge@posit.co>",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-03-09 14:10:02 UTC",
-        "Built": "R 4.5.3; ; 2026-06-27 03:50:24 UTC; windows",
-        "RemoteType": "standard",
-        "RemotePkgRef": "pins",
-        "RemoteRef": "pins",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "1.4.2"
-      }
-    },
     "pkgconfig": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -2722,34 +2593,6 @@
         "RemoteSha": "1.2.6"
       }
     },
-    "uuid": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "uuid",
-        "Version": "1.2-2",
-        "Title": "Tools for Generating and Handling of UUIDs",
-        "Author": "Simon Urbanek [aut, cre, cph] (https://urbanek.org, ORCID:\n    <https://orcid.org/0000-0003-2297-1732>),\n  Theodore Ts'o [aut, cph] (libuuid)",
-        "Maintainer": "Simon Urbanek <Simon.Urbanek@r-project.org>",
-        "Authors@R": "c(person(\"Simon\", \"Urbanek\", role=c(\"aut\",\"cre\",\"cph\"), email=\"Simon.Urbanek@r-project.org\", comment=c(\"https://urbanek.org\", ORCID=\"0000-0003-2297-1732\")), person(\"Theodore\",\"Ts'o\", email=\"tytso@thunk.org\", role=c(\"aut\",\"cph\"), comment=\"libuuid\"))",
-        "Depends": "R (>= 2.9.0)",
-        "Description": "Tools for generating and handling of UUIDs (Universally Unique Identifiers).",
-        "License": "MIT + file LICENSE",
-        "URL": "https://www.rforge.net/uuid",
-        "BugReports": "https://github.com/s-u/uuid/issues",
-        "NeedsCompilation": "yes",
-        "Packaged": "2026-01-23 00:09:28 UTC; rforge",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-01-23 06:40:09 UTC",
-        "Built": "R 4.5.2; x86_64-w64-mingw32; 2026-01-26 00:51:02 UTC; windows",
-        "Archs": "x64",
-        "RemoteType": "standard",
-        "RemotePkgRef": "uuid",
-        "RemoteRef": "uuid",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "1.2-2"
-      }
-    },
     "vctrs": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -2813,29 +2656,6 @@
         "Repository": "CRAN",
         "Date/Publication": "2026-02-04 06:40:10 UTC",
         "Built": "R 4.5.2; ; 2026-02-25 01:54:09 UTC; windows"
-      }
-    },
-    "whisker": {
-      "Source": "CRAN",
-      "Repository": "https://cran.rstudio.com",
-      "description": {
-        "Package": "whisker",
-        "Maintainer": "Edwin de Jonge <edwindjonge@gmail.com>",
-        "License": "GPL-3",
-        "Title": "{{mustache}} for R, Logicless Templating",
-        "Type": "Package",
-        "LazyLoad": "yes",
-        "Author": "Edwin de Jonge",
-        "Description": "Implements 'Mustache' logicless templating.",
-        "Version": "0.4.1",
-        "URL": "https://github.com/edwindj/whisker",
-        "Suggests": "markdown",
-        "RoxygenNote": "6.1.1",
-        "NeedsCompilation": "no",
-        "Packaged": "2022-12-05 15:15:55 UTC; hornik",
-        "Repository": "CRAN",
-        "Date/Publication": "2022-12-05 15:33:50 UTC",
-        "Built": "R 4.5.0; ; 2025-04-30 01:03:00 UTC; windows"
       }
     },
     "withr": {
@@ -3029,7 +2849,7 @@
   },
   "files": {
     "app.R": {
-      "checksum": "ef07eaca2ec96ac425a8287a6854dc7c"
+      "checksum": "7279207cc702cd7bf56015dff2ea86c9"
     }
   },
   "users": null
