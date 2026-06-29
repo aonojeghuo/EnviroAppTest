@@ -134,7 +134,15 @@ server <- function(input, output, session) {
   
   # Reactive read: Automatically polls the server pin for updates every hour (3600000 ms), 
   # bypassing the need for users to refresh the page.
-  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
+#  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
+  
+  # Custom Reactive Engine: Bypasses the broken pin_meta search API entirely
+  fc_all <- reactive({
+    # 1. Start an internal Shiny timer that triggers every hour (3600000 ms)
+    invalidateLater(3600000)
+    # 2. Directly read the pin using your GUID, skipping the metadata check
+    pin_read(board, "YOUR-COPIED-GUID-HERE") 
+  })
   
   output$date_ui <- renderUI({
     req(fc_all())
