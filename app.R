@@ -44,7 +44,11 @@ ab_places <- tibble::tribble(
 ) %>% arrange(name)
 
 # Establish connection to the server board
-board <- board <- pins::board_connect(auth = "envvar")
+## board <- pins::board_connect(auth = "envvar")
+
+board <- pins::board_connect(
+  server = Sys.getenv("PUBLIC_SERVER"),
+  key = Sys.getenv("PUBLIC_KEY") ) 
 
 # --------------------------- UI ----------------------------------------------
 ui <- fluidPage(
