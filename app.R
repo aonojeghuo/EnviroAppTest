@@ -13,6 +13,8 @@ library(leaflet)
 library(DT)
 library(plotly)
 library(lubridate)
+library(pins)
+
 #library(pins)
 
 # --------------------------- Projection & CONFIG ----------------------------
@@ -47,10 +49,12 @@ ab_places <- tibble::tribble(
 
 # Establish connection to the server board
 ## board <- pins::board_connect(auth = "envvar")
-board <- pins::board_url(c(
-  "hydromet_ab_data_v2" = "https://connect.posit.cloud/jolexyenviro/content/019f10f9-b766-791b-6c6a-a437c567c703/"
-))
-
+# Establish connection using the custom environment variables.
+# This forces the pins package to authenticate properly instead of relying on internal container logic.
+board <- board_connect(
+  server = Sys.getenv("PUBLIC_SERVER"),
+  key = Sys.getenv("PUBLIC_KEY")
+)
 # --------------------------- UI ----------------------------------------------
 ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "yeti", primary = "#4CAF50" , secondary = "#2787b0"),
@@ -153,28 +157,14 @@ server <- function(input, output, session) {
   # 
   
   # Custom Reactive Engine: Surgical HTTP Download
+  # Standard Reactive Engine using pins package
   fc_all <- reactive({
+    # 1. Start an internal Shiny timer that triggers every hour
     invalidateLater(3600000)
     
-    # 1. Define the exact file paths
-    # REPLACE YOUR-COPIED-GUID-HERE with your actual GUID!
-    guid <- "019f10f9-b766-791b-6c6a-a437c567c703" 
-    url_primary <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
-    url_fallback <- paste0("https://connect.posit.cloud/content/", guid, "/hydromet_ab_data_v2.rds")
-    
-    # 2. Build the secure keycard using your custom environment variable
-    auth_header <- httr::add_headers(Authorization = paste("Key", Sys.getenv("PUBLIC_KEY")))
-    
-    # 3. Download the file straight into memory, bypassing HTML wrappers
-    response <- httr::GET(url_primary, auth_header)
-    
-    # If the server hid it under the alternate name, grab that one instead
-    if (response$status_code != 200) {
-      response <- httr::GET(url_fallback, auth_header)
-    }
-    
-    # 4. Decompress and read the binary data directly to the dashboard
-    readRDS(gzcon(rawConnection(response$content)))
+    # 2. Read the pin using the standard pins function.
+    # IMPORTANT: Ensure the name exactly matches the name you used in pin_write in your ETL script!
+    pins::pin_read(board, "jolexyenviro/hydromet_ab_data_v2")
   })
   
   
