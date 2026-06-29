@@ -6,6 +6,7 @@
 #  ```r
 library(shiny)
 library(xml2)
+library(httr)
 library(dplyr)
 library(ggplot2)
 library(leaflet)
@@ -134,21 +135,48 @@ server <- function(input, output, session) {
   # Reactive read: Automatically polls the server pin for updates every hour (3600000 ms), 
   # bypassing the need for users to refresh the page.
 #  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
+  # 
+  # fc_all <- reactive({
+  #   # 1. Start an internal Shiny timer that triggers every hour
+  #   invalidateLater(3600000)
+  #   
+  #   # 2. Read the data from our public URL board
+  #   pins::pin_read(board, "hydromet_ab_data_v2")
+  # })
+  # 
+  # 
+  # output$date_ui <- renderUI({
+  #   req(fc_all())
+  #   dates <- sort(unique(fc_all()$date))
+  #   selectInput("sel_date", "Date (Historical & Forecast):", choices = as.character(dates), selected = as.character(Sys.Date()))
+  # })
+  # 
   
+  # Custom Reactive Engine: Surgical HTTP Download
   fc_all <- reactive({
-    # 1. Start an internal Shiny timer that triggers every hour
     invalidateLater(3600000)
     
-    # 2. Read the data from our public URL board
-    pins::pin_read(board, "hydromet_ab_data_v2")
+    # 1. Define the exact file paths
+    # REPLACE YOUR-COPIED-GUID-HERE with your actual GUID!
+    guid <- "019f10f9-b766-791b-6c6a-a437c567c703" 
+    url_primary <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
+    url_fallback <- paste0("https://connect.posit.cloud/content/", guid, "/hydromet_ab_data_v2.rds")
+    
+    # 2. Build the secure keycard using your custom environment variable
+    auth_header <- httr::add_headers(Authorization = paste("Key", Sys.getenv("PUBLIC_KEY")))
+    
+    # 3. Download the file straight into memory, bypassing HTML wrappers
+    response <- httr::GET(url_primary, auth_header)
+    
+    # If the server hid it under the alternate name, grab that one instead
+    if (response$status_code != 200) {
+      response <- httr::GET(url_fallback, auth_header)
+    }
+    
+    # 4. Decompress and read the binary data directly to the dashboard
+    readRDS(gzcon(rawConnection(response$content)))
   })
   
-  
-  output$date_ui <- renderUI({
-    req(fc_all())
-    dates <- sort(unique(fc_all()$date))
-    selectInput("sel_date", "Date (Historical & Forecast):", choices = as.character(dates), selected = as.character(Sys.Date()))
-  })
   
   # Map Render logic
   output$map <- renderLeaflet({
