@@ -14,7 +14,7 @@ library(DT)
 library(plotly)
 library(lubridate)
 library(pins)
-
+library(connectapi)
 #library(pins)
 
 # --------------------------- Projection & CONFIG ----------------------------
@@ -53,10 +53,8 @@ ab_places <- tibble::tribble(
 # This forces the pins package to authenticate properly instead of relying on internal container logic.
 # Use the robust board_rsconnect instead of board_connect
 # It relies on the PUBLIC_SERVER and PUBLIC_KEY environment variables
-board <- pins::board_rsconnect(
-  server = Sys.getenv("PUBLIC_SERVER"),
-  key = Sys.getenv("PUBLIC_KEY")
-)
+board <- pins::board_connect(auth = "envvar")
+
 # --------------------------- UI ----------------------------------------------
 ui <- fluidPage(
   theme = bslib::bs_theme(bootswatch = "yeti", primary = "#4CAF50" , secondary = "#2787b0"),
@@ -138,33 +136,9 @@ ui <- fluidPage(
 # --------------------------- Server ------------------------------------------
 server <- function(input, output, session) {
   
-  # Reactive read: Automatically polls the server pin for updates every hour (3600000 ms), 
-  # bypassing the need for users to refresh the page.
-#  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
-  # 
-  # fc_all <- reactive({
-  #   # 1. Start an internal Shiny timer that triggers every hour
-  #   invalidateLater(3600000)
-  #   
-  #   # 2. Read the data from our public URL board
-  #   pins::pin_read(board, "hydromet_ab_data_v2")
-  # })
-  # 
-  # 
-  # output$date_ui <- renderUI({
-  #   req(fc_all())
-  #   dates <- sort(unique(fc_all()$date))
-  #   selectInput("sel_date", "Date (Historical & Forecast):", choices = as.character(dates), selected = as.character(Sys.Date()))
-  # })
-  # 
+  # 2. The standard, reliable auto-updating function
+  fc_all <- pin_reactive_read(board, "jolexyenviro/hydromet_ab_data_v2", interval = 3600000)
   
-  # Standard Reactive Engine using board_rsconnect
-  fc_all <- reactive({
-    invalidateLater(3600000)
-   # Read the pin using the standard pins function.
-    # IMPORTANT: Use the exact pin name!
-    pins::pin_read(board, "jolexyenviro/hydromet_ab_data_v2")
-  })
   
   # Map Render logic
   output$map <- renderLeaflet({
