@@ -133,17 +133,17 @@ server <- function(input, output, session) {
   # bypassing the need for users to refresh the page.
 #  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
   
-  # Custom Reactive Engine: Completely bypasses the pins package and API
+  # Custom Reactive Engine
   fc_all <- reactive({
-    # 1. Start an internal Shiny timer that triggers every hour
     invalidateLater(3600000)
-    # 2. Build the direct URL to the raw RDS file inside your public pin
-    # REPLACE the GUID string below with your actual copied GUID!
-    data_url <- "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud"
-    # 3. Download and read the data directly over standard HTTPS
+    
+    # 1. Use the direct API download path instead of the webpage URL
+    # Replace YOUR-COPIED-GUID-HERE with your actual GUID!
+    data_url <- "https://connect.posit.cloud/content/019f10f9-b766-791b-6c6a-a437c567c703/download_file?variant_id=0"
+    
+    # 2. Download directly into memory
     readRDS(url(data_url))
   })
-  
   
   output$date_ui <- renderUI({
     req(fc_all())
