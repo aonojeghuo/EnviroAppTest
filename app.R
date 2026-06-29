@@ -134,7 +134,7 @@ server <- function(input, output, session) {
   
   # Reactive read: Automatically polls the server pin for updates every hour (3600000 ms), 
   # bypassing the need for users to refresh the page.
-  fc_all <- pin_reactive_read(board, "https://connect.posit.cloud/jolexyenviro/content/019f10f9-b766-791b-6c6a-a437c567c703", interval = 3600000)
+  fc_all <- pin_reactive_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud", interval = 3600000)
   
   output$date_ui <- renderUI({
     req(fc_all())
