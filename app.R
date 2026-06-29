@@ -5,6 +5,7 @@
   
 #  ```r
 library(shiny)
+library(xml2)
 library(dplyr)
 library(ggplot2)
 library(leaflet)
