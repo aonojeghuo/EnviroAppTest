@@ -156,15 +156,28 @@ server <- function(input, output, session) {
   # })
   # 
   
-  # Custom Reactive Engine: Surgical HTTP Download
-  # Standard Reactive Engine using pins package
+  # Custom Reactive Engine: Direct File System Read
   fc_all <- reactive({
     # 1. Start an internal Shiny timer that triggers every hour
     invalidateLater(3600000)
     
-    # 2. Read the pin using the standard pins function.
-    # IMPORTANT: Ensure the name exactly matches the name you used in pin_write in your ETL script!
-    pins::pin_read(board, "jolexyenviro/hydromet_ab_data_v2")
+    # 2. Define the absolute path to the pin on the Posit Connect local disk
+    # IMPORTANT: Replace "jolexyenviro" with your actual Posit Connect username if it's different!
+    pin_dir <- "/opt/rstudio-connect/mnt/pins/jolexyenviro/hydromet_ab_data_v2/"
+    
+    # 3. Posit Connect often names the actual file data.rds or uses the pin name.
+    # We check for both.
+    file_path_primary <- paste0(pin_dir, "data.rds")
+    file_path_fallback <- paste0(pin_dir, "hydromet_ab_data_v2.rds")
+    
+    # 4. Safely read the file directly from the hard drive
+    if (file.exists(file_path_primary)) {
+      return(readRDS(file_path_primary))
+    } else if (file.exists(file_path_fallback)) {
+      return(readRDS(file_path_fallback))
+    } else {
+      stop("Critical Error: The data file could not be found on the local disk. Please verify the pin name and ETL pipeline success.")
+    }
   })
   
   
