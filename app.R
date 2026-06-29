@@ -133,31 +133,61 @@ server <- function(input, output, session) {
   
   # 2. The standard, reliable auto-updating function
   # Custom Reactive Engine: Base R Native Download (No httr or pins!)
+  # fc_all <- reactive({
+  #   invalidateLater(3600000) # Keep the hourly auto-refresh
+  #   
+  #   # 1. Provide the exact GUID from your data pin
+  #   guid <- "019f10f9-b766-791b-6c6a-a437c567c703"
+  #   
+  #   # 2. Define the exact file paths pins uses on the backend
+  #   url_name <- paste0("https://connect.posit.cloud/content/", guid, "/hydromet_ab_data_v2.rds")
+  #   url_data <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
+  #   
+  #   # 3. Create a secure local landing pad for the file
+  #   temp_file <- tempfile(fileext = ".rds")
+  #   
+  #   # 4. Grab your API key to bypass the HTML preview pages
+  #   api_key <- Sys.getenv("CONNECT_API_KEY")
+  #   auth_header <- c(Authorization = paste("Key", api_key))
+  #   
+  #   # 5. Download directly via libcurl (tries the named file first, falls back to data.rds)
+  #   tryCatch({
+  #     download.file(url_name, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
+  #     return(readRDS(temp_file))
+  #   }, error = function(e) {
+  #     download.file(url_data, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
+  #     return(readRDS(temp_file))
+  #   })
+  # })
+  
+  
+  # Custom Reactive Engine: With Diagnostic Logging
   fc_all <- reactive({
-    invalidateLater(3600000) # Keep the hourly auto-refresh
+    invalidateLater(3600000)
     
     # 1. Provide the exact GUID from your data pin
     guid <- "019f10f9-b766-791b-6c6a-a437c567c703"
+    url_primary <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
     
-    # 2. Define the exact file paths pins uses on the backend
-    url_name <- paste0("https://connect.posit.cloud/content/", guid, "/hydromet_ab_data_v2.rds")
-    url_data <- paste0("https://connect.posit.cloud/content/", guid, "/data.rds")
-    
-    # 3. Create a secure local landing pad for the file
-    temp_file <- tempfile(fileext = ".rds")
-    
-    # 4. Grab your API key to bypass the HTML preview pages
+    # 2. Grab your API key
     api_key <- Sys.getenv("CONNECT_API_KEY")
-    auth_header <- c(Authorization = paste("Key", api_key))
+    auth_header <- httr::add_headers(Authorization = paste("Key", api_key))
     
-    # 5. Download directly via libcurl (tries the named file first, falls back to data.rds)
-    tryCatch({
-      download.file(url_name, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
-      return(readRDS(temp_file))
-    }, error = function(e) {
-      download.file(url_data, temp_file, method = "libcurl", headers = auth_header, quiet = TRUE)
-      return(readRDS(temp_file))
-    })
+    # 3. Attempt the download
+    response <- httr::GET(url_primary, auth_header)
+    
+    # 4. THE DIAGNOSTIC CHECK
+    # If the server did not return a successful 200 code, print the HTML to the logs!
+    if (response$status_code != 200) {
+      error_page <- httr::content(response, "text", encoding = "UTF-8")
+      print("CRITICAL SERVER BLOCK INTERCEPTED:")
+      print(paste("HTTP Status Code:", response$status_code))
+      print(substring(error_page, 1, 500)) # Print the first 500 characters of the webpage
+      stop("Server returned an HTML error page instead of data. Check the logs!")
+    }
+    
+    # 5. If it IS successful (Code 200), read the data safely
+    readRDS(gzcon(rawConnection(response$content)))
   })
   
   
