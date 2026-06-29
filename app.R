@@ -141,7 +141,7 @@ server <- function(input, output, session) {
     # 1. Start an internal Shiny timer that triggers every hour (3600000 ms)
     invalidateLater(3600000)
     # 2. Directly read the pin using your GUID, skipping the metadata check
-    pin_read(board, "YOUR-COPIED-GUID-HERE") 
+    pin_read(board, "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud") 
   })
   
   output$date_ui <- renderUI({
