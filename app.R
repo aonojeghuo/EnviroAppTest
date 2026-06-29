@@ -47,7 +47,7 @@ ab_places <- tibble::tribble(
 # Establish connection to the server board
 ## board <- pins::board_connect(auth = "envvar")
 board <- pins::board_url(c(
-  "hydromet_ab_data_v2" = "https://019f10f9-b766-791b-6c6a-a437c567c703.share.connect.posit.cloud/"
+  "hydromet_ab_data_v2" = "https://connect.posit.cloud/jolexyenviro/content/019f10f9-b766-791b-6c6a-a437c567c703/"
 ))
 
 # --------------------------- UI ----------------------------------------------
